@@ -1,50 +1,37 @@
-using Orleans.Runtime;
-using Microsoft.Extensions.Logging;
-using Orleans.Hosting;
 using Orleans.Configuration;
-using smartcache.CACHE;
-
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+using Orleans.Runtime;
 
 
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+string connectionString = builder.Configuration.GetSection("ConnectionString").Value;
 
 builder.Host.UseOrleans(siloBuilder =>
 {
-    var connectionString = builder.Configuration.GetSection("ConnectionString").Value;
-
-    siloBuilder
-        //.UseAzureStorageClustering(o => o.ConfigureTableServiceClient(connectionString))
-        .AddAzureBlobGrainStorage(
-            name: "emailsmartcache",
-            o => o.ConfigureBlobServiceClient(connectionString)
-        );            
-
+    siloBuilder.UseAzureStorageClustering(o => o.ConfigureTableServiceClient(connectionString));
+    siloBuilder.AddAzureBlobGrainStorage(
+        name: "nomniotest",
+        configureOptions: options =>
+        {
+            options.ConfigureBlobServiceClient(connectionString);
+        }
+    );
+    //siloBuilder.AddAzureBlobGrainStorageAsDefault("nomniotest");
     siloBuilder.Configure<ClusterOptions>(options =>
     {
-        options.ClusterId = "emailsm1";
-        options.ServiceId = "emailsmartcache";
+        options.ClusterId = "nomniotest-cluster";
+        options.ServiceId = "nomniotest";
     });
 });
 
-// State saver
-builder.Services.AddSingleton<IHostedService, StateSaver>();
-
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 app.MapControllers();
 

@@ -5,8 +5,6 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "smartcache.API", "smartcache.API\smartcache.API.csproj", "{F70DC16F-4B1A-46F5-AAA3-78F05D046E59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "smartcache.CACHE", "smartcache.CACHE\smartcache.CACHE.csproj", "{A62D4693-3428-43C6-8180-E448A5C2D379}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{F70DC16F-4B1A-46F5-AAA3-78F05D046E59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F70DC16F-4B1A-46F5-AAA3-78F05D046E59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F70DC16F-4B1A-46F5-AAA3-78F05D046E59}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A62D4693-3428-43C6-8180-E448A5C2D379}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A62D4693-3428-43C6-8180-E448A5C2D379}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A62D4693-3428-43C6-8180-E448A5C2D379}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A62D4693-3428-43C6-8180-E448A5C2D379}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

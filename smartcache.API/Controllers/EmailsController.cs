@@ -9,14 +9,14 @@ namespace smartcache.API.Controllers
     [ApiController]
     public class EmailsController : ControllerBase
     {
-        private readonly IGrainFactory grains;
-        public EmailsController() {
-        
+        private readonly IGrainFactory _grains;
+        public EmailsController(IGrainFactory grains) {
+            _grains = grains;
         }
 
         [HttpGet]
         [Route("{email}")]
-        public IResult CheckEmail(string email)
+        public async Task<IResult> CheckEmail(string email)
         {
             if (!EmailHelper.IsValidEmail(email))
             {
@@ -25,14 +25,23 @@ namespace smartcache.API.Controllers
 
             Email parsedEmail = EmailHelper.ParseEmail(email);
 
-            IEmailsGrain grain = grains.GetGrain<IEmailsGrain>(parsedEmail.Domain);
-            var result = grain.EmailFound(parsedEmail.LocalPart);
+            bool result = false;
+            try
+            {
+                var grain = _grains.GetGrain<IEmailsGrain?>(parsedEmail.Domain);
+                result = await grain.EmailFound(parsedEmail.LocalPart);
+            }
+            catch (NullReferenceException e)
+            {
+                Results.Ok(result);
+            }
+            
 
             return Results.Ok(result);
         }
 
         [HttpPost]
-        [Route("{emai}")]
+        [Route("{email}")]
         public IResult AddEmail(string email)
         {
             if (!EmailHelper.IsValidEmail(email))
@@ -42,7 +51,7 @@ namespace smartcache.API.Controllers
 
             Email parsedEmail = EmailHelper.ParseEmail(email);
 
-            IEmailsGrain grain = grains.GetGrain<IEmailsGrain>(parsedEmail.Domain);
+            IEmailsGrain grain = _grains.GetGrain<IEmailsGrain>(parsedEmail.Domain);
             var result = grain.AddEmail(parsedEmail.LocalPart);
 
             return Results.Ok(result);
