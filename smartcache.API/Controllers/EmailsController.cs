@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Orleans;
 using smartcache.API.Models;
 
 namespace smartcache.API.Controllers
@@ -24,7 +25,10 @@ namespace smartcache.API.Controllers
 
             Email parsedEmail = EmailHelper.ParseEmail(email);
 
-            return Results.Ok();
+            IEmailsGrain grain = grains.GetGrain<IEmailsGrain>(parsedEmail.Domain);
+            var result = grain.EmailFound(parsedEmail.LocalPart);
+
+            return Results.Ok(result);
         }
 
         [HttpPost]
@@ -38,7 +42,10 @@ namespace smartcache.API.Controllers
 
             Email parsedEmail = EmailHelper.ParseEmail(email);
 
-            return Results.Ok();
+            IEmailsGrain grain = grains.GetGrain<IEmailsGrain>(parsedEmail.Domain);
+            var result = grain.AddEmail(parsedEmail.LocalPart);
+
+            return Results.Ok(result);
         }
 
     }

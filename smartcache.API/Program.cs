@@ -2,6 +2,7 @@ using Orleans.Runtime;
 using Microsoft.Extensions.Logging;
 using Orleans.Hosting;
 using Orleans.Configuration;
+using smartcache.CACHE;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +17,11 @@ builder.Host.UseOrleans(siloBuilder =>
     var connectionString = builder.Configuration.GetSection("ConnectionString").Value;
 
     siloBuilder
-        .UseAzureStorageClustering(o => o.ConfigureTableServiceClient(connectionString))
-        .AddAzureBlobGrainStorage("emailsmartcache", o => o.ConfigureBlobServiceClient(connectionString));
+        //.UseAzureStorageClustering(o => o.ConfigureTableServiceClient(connectionString))
+        .AddAzureBlobGrainStorage(
+            name: "emailsmartcache",
+            o => o.ConfigureBlobServiceClient(connectionString)
+        );            
 
     siloBuilder.Configure<ClusterOptions>(options =>
     {
@@ -25,6 +29,10 @@ builder.Host.UseOrleans(siloBuilder =>
         options.ServiceId = "emailsmartcache";
     });
 });
+
+// State saver
+builder.Services.AddSingleton<IHostedService, StateSaver>();
+
 
 var app = builder.Build();
 
