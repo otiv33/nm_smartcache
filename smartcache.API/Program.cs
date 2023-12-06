@@ -16,7 +16,7 @@ builder.Host.UseOrleans(siloBuilder =>
             options.ConfigureBlobServiceClient(connectionString);
         }
     );
-    //siloBuilder.AddAzureBlobGrainStorageAsDefault("nomniotest");
+    siloBuilder.UseInMemoryReminderService();
     siloBuilder.Configure<ClusterOptions>(options =>
     {
         options.ClusterId = "nomniotest-cluster";

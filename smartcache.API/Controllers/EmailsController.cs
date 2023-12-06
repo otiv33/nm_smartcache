@@ -20,41 +20,31 @@ namespace smartcache.API.Controllers
         {
             if (!EmailHelper.IsValidEmail(email))
             {
-                return Results.BadRequest();
+                return Results.BadRequest("The entered email is not valid");
             }
 
             Email parsedEmail = EmailHelper.ParseEmail(email);
 
-            bool result = false;
-            try
-            {
-                var grain = _grains.GetGrain<IEmailsGrain?>(parsedEmail.Domain);
-                result = await grain.EmailFound(parsedEmail.LocalPart);
-            }
-            catch (NullReferenceException e)
-            {
-                Results.Ok(result);
-            }
-            
-
-            return Results.Ok(result);
+            var grain = _grains.GetGrain<IEmailsGrain>(parsedEmail.Domain);
+            bool result = await grain.EmailFound(parsedEmail.LocalPart);
+            return result ? Results.Ok("OK") : Results.NotFound("Not found");
         }
 
         [HttpPost]
         [Route("{email}")]
-        public IResult AddEmail(string email)
+        public async Task<IResult> AddEmail(string email)
         {
             if (!EmailHelper.IsValidEmail(email))
             {
-                return Results.BadRequest();
+                return Results.BadRequest("The entered email is not valid");
             }
 
             Email parsedEmail = EmailHelper.ParseEmail(email);
 
             IEmailsGrain grain = _grains.GetGrain<IEmailsGrain>(parsedEmail.Domain);
-            var result = grain.AddEmail(parsedEmail.LocalPart);
+            bool result = await grain.AddEmail(parsedEmail.LocalPart);
+            return result ? Results.Created("Created", email) : Results.Conflict("Email already exists");
 
-            return Results.Ok(result);
         }
 
     }

@@ -1,5 +1,6 @@
 
 using Orleans.Runtime;
+using Orleans.Timers;
 
 namespace smartcache.API.Models
 {
@@ -20,13 +21,15 @@ namespace smartcache.API.Models
             IPersistentState<EmailsState> state)
         {
             _state = state;
-            //this.RegisterTimer(WriteToStorage, null, TimeSpan.FromMinutes(0), TimeSpan.FromMinutes(5));
-            //this.RegisterOrUpdateReminder("save-to-blob-storage", TimeSpan.FromMinutes(0), TimeSpan.FromMinutes(5));
+            this.RegisterOrUpdateReminder("save-to-blob-storage", TimeSpan.FromMinutes(0), TimeSpan.FromMinutes(1));
         }
 
         public override Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            _state.State.Emails = new List<string>();
+            if (_state.State.Emails == null)
+            {
+                _state.State.Emails = new List<string>();
+            }
             return base.OnActivateAsync(cancellationToken);
         }
 
@@ -46,9 +49,9 @@ namespace smartcache.API.Models
             return Task.FromResult(emails.Find(x => x == localPart) != null);
         }
 
+        // Save grain state to persistent blob storage every 5 minutes
         public async Task ReceiveReminder(string reminderName, TickStatus status)
         {
-            // Save to blob storage
             await _state.WriteStateAsync();
             return;
         }
