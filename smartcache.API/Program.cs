@@ -19,7 +19,7 @@ builder.Host.UseOrleans(siloBuilder =>
     siloBuilder.UseInMemoryReminderService();
     siloBuilder.Configure<ClusterOptions>(options =>
     {
-        options.ClusterId = "nomniotest-cluster";
+        options.ClusterId = "nomniotest-cluster-1";
         options.ServiceId = "nomniotest";
     });
 });
