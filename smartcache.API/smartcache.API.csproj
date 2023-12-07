@@ -4,15 +4,17 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>ceb668d7-604a-48fc-80b3-b1c6e312d21a</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.14" />
     <PackageReference Include="Microsoft.Orleans.Clustering.AzureStorage" Version="7.2.4" />
-    <PackageReference Include="Microsoft.Orleans.Core" Version="7.2.4" />
     <PackageReference Include="Microsoft.Orleans.Persistence.AzureStorage" Version="7.2.4" />
+    <PackageReference Include="Microsoft.Orleans.Reminders" Version="7.2.4" />
     <PackageReference Include="Microsoft.Orleans.Server" Version="7.2.4" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
   </ItemGroup>
 
 </Project>
