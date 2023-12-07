@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Orleans;
+using smartcache.API.Auth;
 using smartcache.API.Models;
 
 namespace smartcache.API.Controllers
 {
     [Route("emails")]
     [ApiController]
+    [AuthorizeRequest("User", "Admin")]
     public class EmailsController : ControllerBase
     {
         private readonly IGrainFactory _grains;
