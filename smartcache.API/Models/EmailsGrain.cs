@@ -14,14 +14,14 @@ namespace smartcache.API.Models
 
     public sealed class EmailsGrain : Grain, IEmailsGrain, IRemindable
     {
-        private readonly IPersistentState<EmailsState> _state;
+        public readonly IPersistentState<EmailsState> _state;
 
         public EmailsGrain(
             [PersistentState(stateName: "emails", storageName: "nomniotest")]
             IPersistentState<EmailsState> state)
         {
             _state = state;
-            this.RegisterOrUpdateReminder("save-to-blob-storage", TimeSpan.FromMinutes(0), TimeSpan.FromMinutes(1));
+            this.RegisterOrUpdateReminder("save-to-blob-storage", TimeSpan.FromMinutes(0), TimeSpan.FromMinutes(5));
         }
 
         public override Task OnActivateAsync(CancellationToken cancellationToken)
